@@ -25,11 +25,11 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest) throws Exception {
         Map<String, Object> response = new HashMap<>();
         StatusResponse statusResponse = new StatusResponse();
-        UserResponse data = userService.createUser(userRequest);
-        if (data != null) {
+        UserResponse user = userService.createUser(userRequest);
+        if (user != null) {
             statusResponse.setErrCode(200);
             statusResponse.setErrMsg("User created successfully");
-            response.put("data", data);
+            response.put("data", user);
         }else {
             statusResponse.setErrCode(204); // No Content
             statusResponse.setErrMsg("Your Content Unexceptionable!");
