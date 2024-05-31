@@ -1,35 +1,36 @@
 package com.rupp.java.PFM_API.controller;
 
+import com.rupp.java.PFM_API.dto.request.ExpenseCategoryRequest;
 import com.rupp.java.PFM_API.dto.request.IncomeCategoryRequest;
 import com.rupp.java.PFM_API.dto.response.StatusResponse;
+import com.rupp.java.PFM_API.entity.ExpenseCategory;
 import com.rupp.java.PFM_API.entity.IncomeCategory;
+import com.rupp.java.PFM_API.service.ExpenseCategoryService;
 import com.rupp.java.PFM_API.service.IncomeCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/income-category")
-public class IncomeCategoryController {
-    private final IncomeCategoryService incomeCategoryService;
+@RequestMapping("/api/v1/expense-category")
+public class ExpenseCategoryController {
+    private final ExpenseCategoryService expenseCategoryService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody IncomeCategoryRequest incomeCategoryRequest) throws Exception {
+    public ResponseEntity<?> create(@RequestBody ExpenseCategoryRequest expenseCategoryRequest) throws Exception {
         Map<String, Object> response = new HashMap<>();
         StatusResponse statusResponse = new StatusResponse();
-        IncomeCategory incomeCategory = incomeCategoryService.createIncomeCategory(incomeCategoryRequest);
-        if (incomeCategory != null) {
+        ExpenseCategory expenseCategory = expenseCategoryService.create(expenseCategoryRequest);
+        if (expenseCategory != null) {
             statusResponse.setErrCode(200);
-            statusResponse.setErrMsg("Income category created successfully");
-            response.put("data", incomeCategory);
+            statusResponse.setErrMsg("Expense category created successfully");
+            response.put("data", expenseCategory);
         }else{
             statusResponse.setErrCode(204); // No Content
             statusResponse.setErrMsg("Your Content Unexceptionable!");
@@ -43,15 +44,15 @@ public class IncomeCategoryController {
     public ResponseEntity<?> getAll() throws Exception {
         Map<String, Object> response = new HashMap<>();
         StatusResponse statusResponse = new StatusResponse();
-        List<IncomeCategory> incomeCategories = incomeCategoryService.getAllIncomeCategories();
-        if (incomeCategories.isEmpty()){
+        List<ExpenseCategory> expenseCategoryList = expenseCategoryService.getAll();
+        if (expenseCategoryList.isEmpty()){
             statusResponse.setErrCode(204); // No Content
             statusResponse.setErrMsg("Your Content Unexceptionable!");
-            response.put("data", incomeCategories);
+            response.put("data", expenseCategoryList);
         }else {
             statusResponse.setErrCode(200);
             statusResponse.setErrMsg("Income category list retrieved successfully");
-            response.put("data", incomeCategories);
+            response.put("data", expenseCategoryList);
         }
         response.put("status", statusResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -61,29 +62,29 @@ public class IncomeCategoryController {
     public ResponseEntity<?> getOne(@PathVariable(name = "id") Long id) throws Exception {
         Map<String, Object> response = new HashMap<>();
         StatusResponse statusResponse = new StatusResponse();
-        IncomeCategory incomeCategory = incomeCategoryService.getIncomeCategoryById(id);
-        if (incomeCategory == null) {
+        ExpenseCategory expenseCategory = expenseCategoryService.getById(id);
+        if (expenseCategory == null) {
             statusResponse.setErrCode(204); // No Content
             statusResponse.setErrMsg("Your Content Unexceptionable!");
-            response.put("data", incomeCategory);
+            response.put("data", expenseCategory);
         }else{
             statusResponse.setErrCode(200);
             statusResponse.setErrMsg("Income category retrieved successfully");
-            response.put("data", incomeCategory);
+            response.put("data", expenseCategory);
         }
         response.put("status", statusResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable(name = "id") Long id, @RequestBody IncomeCategoryRequest incomeCategoryRequest) throws Exception {
+    public ResponseEntity<?> update(@PathVariable(name = "id") Long id, @RequestBody ExpenseCategoryRequest expenseCategoryRequest) throws Exception {
         Map<String, Object> response = new HashMap<>();
         StatusResponse statusResponse = new StatusResponse();
-        IncomeCategory incomeCategory = incomeCategoryService.updateIncomeCategory(id, incomeCategoryRequest);
-        if (incomeCategory != null) {
+        ExpenseCategory expenseCategory = expenseCategoryService.update(id, expenseCategoryRequest);
+        if (expenseCategory != null) {
             statusResponse.setErrCode(200);
             statusResponse.setErrMsg("Income category updated successfully");
-            response.put("data", incomeCategory);
+            response.put("data", expenseCategory);
         }else{
             statusResponse.setErrCode(204);
             statusResponse.setErrMsg("Your Content Unexceptionable!");
@@ -97,10 +98,10 @@ public class IncomeCategoryController {
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) throws Exception {
         Map<String, Object> response = new HashMap<>();
         StatusResponse statusResponse = new StatusResponse();
-        boolean isDelete = incomeCategoryService.deleteIncomeCategory(id);
+        boolean isDelete = expenseCategoryService.delete(id);
         if (isDelete) {
             statusResponse.setErrCode(200);
-            statusResponse.setErrMsg("Income category deleted successfully");
+            statusResponse.setErrMsg("Expense category deleted successfully");
         }
         response.put("status", statusResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);

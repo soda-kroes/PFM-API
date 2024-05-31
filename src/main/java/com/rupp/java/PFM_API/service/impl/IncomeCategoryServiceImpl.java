@@ -60,7 +60,7 @@ public class IncomeCategoryServiceImpl implements IncomeCategoryService {
     public boolean deleteIncomeCategory(Long id) throws Exception {
         boolean find = false;
         IncomeCategory incomeCategory = incomeCategoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Income category with id " + id + " not found."));
-        if (Objects.equals(incomeCategory.getName(), id)) {
+        if (Objects.equals(incomeCategory.getId(), id)) {
             incomeCategoryRepository.delete(incomeCategory);
             find = true;
         }
